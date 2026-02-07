@@ -140,7 +140,7 @@
         <source src="video.mp4" type="video/mp4">
       </video>
       <div class="final-text">
-        Gros bisous esquimaux à distance, même si j’ai clairement envie de bien plus que ça... 🫶
+        Gros bisous esquimaux à distance, même si j’ai clairement envie de bien plus que ça 🫶
       </div>
     </div>
   </div>
@@ -150,28 +150,24 @@
     const yesBtn = document.getElementById("yesBtn");
     const overlay = document.getElementById("overlay");
 
-    const yesRect = yesBtn.getBoundingClientRect();
-let angle = 0;
+   const positions = [
+  { x: -60, y: -40 },
+  { x: 0, y: -50 },
+  { x: 60, y: -40 },
+  { x: 70, y: 0 },
+  { x: 60, y: 40 },
+  { x: 0, y: 50 },
+  { x: -60, y: 40 },
+  { x: -70, y: 0 }
+];
+
+let index = 0;
 
 setInterval(() => {
-  angle += 0.35; // vitesse de rotation (un peu plus rapide)
-
-  const radius = 60; // distance autour du OUI (safe pour mobile)
-
-  const x =
-    yesRect.left +
-    yesRect.width / 2 +
-    Math.cos(angle) * radius -
-    noBtn.offsetWidth / 2;
-
-  const y =
-    yesRect.top +
-    yesRect.height / 2 +
-    Math.sin(angle) * radius -
-    noBtn.offsetHeight / 2;
-
-  noBtn.style.transform = `translate(${x}px, ${y}px)`;
-}, 180);
+  const pos = positions[index];
+  noBtn.style.transform = `translate(${pos.x}px, ${pos.y}px)`;
+  index = (index + 1) % positions.length;
+}, 220);
 
     yesBtn.addEventListener("click", () => {
       navigator.vibrate?.(200);
