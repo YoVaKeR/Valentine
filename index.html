@@ -1,134 +1,126 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Petite fripouille</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Une question importante</title>
 
-<style>
-  body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: linear-gradient(180deg, #f7f3ee, #ece6dc);
-    color: #2e2e2e;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #f7f3ee, #eaf4fb);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
 
-  .card {
-    background: #ffffff;
-    padding: 32px 24px;
-    border-radius: 18px;
-    width: 90%;
-    max-width: 360px;
-    text-align: center;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-  }
+    .container {
+      text-align: center;
+      padding: 20px;
+    }
 
-  h1 {
-    font-size: 22px;
-    margin-bottom: 28px;
-  }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 40px;
+      color: #1f3a4a;
+    }
 
-  .buttons {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-  }
+    .buttons {
+      position: relative;
+      height: 200px;
+    }
 
-  button {
-    flex: 1;
-    padding: 14px 0;
-    border-radius: 12px;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-  }
+    button {
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 600;
+    }
 
-  .yes {
-    background: #2e2e2e;
-    color: white;
-  }
+    /* BOUTON OUI */
+    #yes {
+      background: #cfe9f5; /* bleu pastel */
+      color: #1f3a4a;
+      width: 170px;
+      height: 64px;
+      font-size: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    }
 
-  .no {
-    background: #e6e0d8;
-    position: relative;
-  }
+    /* BOUTON NON */
+    #no {
+      background: #e0e0e0; /* gris */
+      color: #555;
+      width: 105px;   /* ~38% plus petit */
+      height: 40px;
+      font-size: 14px;
+      position: absolute;
+      left: 50%;
+      top: 90px;
+      transform: translateX(-50%);
+      transition: transform 0.15s linear;
+    }
 
-  /* Overlay */
-  .overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    display: none;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .popup {
-    background: white;
-    border-radius: 18px;
-    padding: 20px;
-    width: 85%;
-    max-width: 320px;
-    text-align: center;
-    animation: fadeIn 0.4s ease;
-  }
-
-  video {
-    width: 100%;
-    border-radius: 14px;
-    margin-bottom: 14px;
-  }
-
-  .final-text {
-    font-size: 16px;
-    line-height: 1.4;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-  }
-</style>
+    .message {
+      margin-top: 30px;
+      font-size: 1.1rem;
+      color: #1f3a4a;
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="card">
-  <h1>Petite fripouille,<br>veux-tu être ma Valentine ?</h1>
+  <div class="container">
+    <h1>
+      Gros bisous eskimos à distance, même si j’ai clairement envie de bien plus que ça 🫶
+    </h1>
 
-  <div class="buttons">
-    <button class="yes" onclick="showPopup()">Oui</button>
-    <button class="no" onmouseover="moveButton(this)">Non</button>
-  </div>
-</div>
+    <div class="buttons">
+      <button id="yes">Oui</button>
+      <button id="no">Non</button>
+    </div>
 
-<div class="overlay" id="overlay">
-  <div class="popup">
-    <video autoplay loop muted playsinline>
-      <source src="video.mp4" type="video/mp4">
-    </video>
-    <div class="final-text">
-      Gros bisous esquimaux à distance,<br>
-      même si j’ai clairement envie de bien plus que ça. 💌
+    <div class="message" id="message">
+      J’en étais sûr 😌🫶
     </div>
   </div>
-</div>
 
-<script>
-  function moveButton(btn) {
-    const x = Math.random() * 120 - 60;
-    const y = Math.random() * 80 - 40;
-    btn.style.transform = `translate(${x}px, ${y}px)`;
-  }
+  <script>
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+    const message = document.getElementById("message");
 
-  function showPopup() {
-    document.getElementById("overlay").style.display = "flex";
-  }
-</script>
+    function moveNoButton() {
+      const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+      const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    // Mouvement permanent (desktop + mobile)
+    setInterval(moveNoButton, 650);
+
+    // Accélération si on s'approche (desktop)
+    noBtn.addEventListener("mouseenter", moveNoButton);
+
+    // Mobile : dès qu’on touche
+    noBtn.addEventListener("touchstart", moveNoButton);
+
+    // Action bouton OUI
+    yesBtn.addEventListener("click", () => {
+      message.style.display = "block";
+      noBtn.style.display = "none";
+      yesBtn.style.transform = "scale(1.1)";
+    });
+  </script>
 
 </body>
 </html>
