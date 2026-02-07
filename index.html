@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Une question importante</title>
 
   <style>
@@ -10,11 +10,28 @@
       margin: 0;
       height: 100vh;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, #f7f3ee, #eaf4fb);
+      overflow: hidden;
+    }
+
+    /* VIDEO BACKGROUND */
+    video {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(247, 243, 238, 0.75);
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
     }
 
     .container {
@@ -40,9 +57,8 @@
       font-weight: 600;
     }
 
-    /* BOUTON OUI */
     #yes {
-      background: #cfe9f5; /* bleu pastel */
+      background: #cfe9f5;
       color: #1f3a4a;
       width: 170px;
       height: 64px;
@@ -50,18 +66,16 @@
       box-shadow: 0 10px 25px rgba(0,0,0,0.12);
     }
 
-    /* BOUTON NON */
     #no {
-      background: #e0e0e0; /* gris */
+      background: #e0e0e0;
       color: #555;
-      width: 105px;   /* ~38% plus petit */
+      width: 105px;
       height: 40px;
       font-size: 14px;
       position: absolute;
       left: 50%;
       top: 90px;
       transform: translateX(-50%);
-      transition: transform 0.15s linear;
     }
 
     .message {
@@ -70,25 +84,38 @@
       color: #1f3a4a;
       display: none;
     }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
   </style>
 </head>
 
 <body>
 
-  <div class="container">
-    <h1>
-      Gros bisous eskimos à distance, même si j’ai clairement envie de bien plus que ça 🫶
-    </h1>
+  <!-- VIDEO (sans son, boucle automatique) -->
+  <video autoplay muted loop playsinline>
+    <source src="video.mp4" type="video/mp4" />
+  </video>
 
-    <div class="buttons">
-      <button id="yes">Oui</button>
-      <button id="no">Non</button>
-    </div>
+  <div class="overlay">
+    <div class="container">
+      <h1>
+        Gros bisous eskimos à distance, même si j’ai clairement envie de bien plus que ça 🫶
+      </h1>
 
-    <div class="message" id="message">
-      J’en étais sûr 😌🫶
+      <div class="buttons">
+        <button id="yes">Oui</button>
+        <button id="no">Non</button>
+      </div>
+
+      <div class="message" id="message">J’en étais sûr 😌🫶</div>
     </div>
   </div>
+
+  <canvas id="confetti"></canvas>
 
   <script>
     const noBtn = document.getElementById("no");
@@ -96,29 +123,70 @@
     const message = document.getElementById("message");
 
     function moveNoButton() {
-      const maxX = window.innerWidth - noBtn.offsetWidth - 20;
-      const maxY = window.innerHeight - noBtn.offsetHeight - 20;
-
-      const x = Math.random() * maxX;
-      const y = Math.random() * maxY;
-
+      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
       noBtn.style.transform = `translate(${x}px, ${y}px)`;
     }
 
-    // Mouvement permanent (desktop + mobile)
-    setInterval(moveNoButton, 650);
-
-    // Accélération si on s'approche (desktop)
+    setInterval(moveNoButton, 600);
     noBtn.addEventListener("mouseenter", moveNoButton);
-
-    // Mobile : dès qu’on touche
     noBtn.addEventListener("touchstart", moveNoButton);
 
-    // Action bouton OUI
+    /* CONFETTIS */
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let confettis = [];
+
+    function createConfetti() {
+      for (let i = 0; i < 80; i++) {
+        confettis.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          r: Math.random() * 4 + 2,
+          d: Math.random() * 5 + 2,
+        });
+      }
+    }
+
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "rgba(31,58,74,0.5)";
+      confettis.forEach((c) => {
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      updateConfetti();
+    }
+
+    function updateConfetti() {
+      confettis.forEach((c) => {
+        c.y += c.d;
+        if (c.y > canvas.height) c.y = -10;
+      });
+    }
+
+    let confettiInterval;
+
     yesBtn.addEventListener("click", () => {
       message.style.display = "block";
       noBtn.style.display = "none";
       yesBtn.style.transform = "scale(1.1)";
+
+      // vibration téléphone
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+
+      // confettis légers pendant 5 sec
+      createConfetti();
+      confettiInterval = setInterval(drawConfetti, 30);
+      setTimeout(() => {
+        clearInterval(confettiInterval);
+        confettis = [];
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }, 5000);
     });
   </script>
 
