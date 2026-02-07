@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Petite fripouille</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: linear-gradient(180deg, #f7f3ee, #ece6dc);
+    color: #2e2e2e;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .card {
+    background: #ffffff;
+    padding: 32px 24px;
+    border-radius: 18px;
+    width: 90%;
+    max-width: 360px;
+    text-align: center;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  }
+
+  h1 {
+    font-size: 22px;
+    margin-bottom: 28px;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  button {
+    flex: 1;
+    padding: 14px 0;
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .yes {
+    background: #2e2e2e;
+    color: white;
+  }
+
+  .no {
+    background: #e6e0d8;
+    position: relative;
+  }
+
+  /* Overlay */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .popup {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    width: 85%;
+    max-width: 320px;
+    text-align: center;
+    animation: fadeIn 0.4s ease;
+  }
+
+  video {
+    width: 100%;
+    border-radius: 14px;
+    margin-bottom: 14px;
+  }
+
+  .final-text {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h1>Petite fripouille,<br>veux-tu être ma Valentine ?</h1>
+
+  <div class="buttons">
+    <button class="yes" onclick="showPopup()">Oui</button>
+    <button class="no" onmouseover="moveButton(this)">Non</button>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="popup">
+    <video autoplay loop muted playsinline>
+      <source src="video.mp4" type="video/mp4">
+    </video>
+    <div class="final-text">
+      Gros bisous esquimaux à distance,<br>
+      même si j’ai clairement envie de bien plus que ça. 💌
+    </div>
+  </div>
+</div>
+
+<script>
+  function moveButton(btn) {
+    const x = Math.random() * 120 - 60;
+    const y = Math.random() * 80 - 40;
+    btn.style.transform = `translate(${x}px, ${y}px)`;
+  }
+
+  function showPopup() {
+    document.getElementById("overlay").style.display = "flex";
+  }
+</script>
+
+</body>
+</html>
