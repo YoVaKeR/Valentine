@@ -150,24 +150,30 @@
     const yesBtn = document.getElementById("yesBtn");
     const overlay = document.getElementById("overlay");
 
-   const positions = [
+  const offsets = [
   { x: -60, y: -40 },
-  { x: 0, y: -50 },
+  { x: 0, y: -55 },
   { x: 60, y: -40 },
-  { x: 70, y: 0 },
-  { x: 60, y: 40 },
-  { x: 0, y: 50 },
-  { x: -60, y: 40 },
-  { x: -70, y: 0 }
+  { x: 75, y: 0 },
+  { x: 60, y: 45 },
+  { x: 0, y: 55 },
+  { x: -60, y: 45 },
+  { x: -75, y: 0 },
+  { x: -30, y: -20 },
+  { x: 30, y: 20 }
 ];
 
-let index = 0;
-
 setInterval(() => {
-  const pos = positions[index];
-  noBtn.style.transform = `translate(${pos.x}px, ${pos.y}px)`;
-  index = (index + 1) % positions.length;
-}, 220);
+  // Disparaît
+  noBtn.style.opacity = "0";
+
+  setTimeout(() => {
+    const pos = offsets[Math.floor(Math.random() * offsets.length)];
+    noBtn.style.transform = `translate(${pos.x}px, ${pos.y}px)`;
+    noBtn.style.opacity = "1";
+  }, 120);
+
+}, 260);
 
     yesBtn.addEventListener("click", () => {
       navigator.vibrate?.(200);
